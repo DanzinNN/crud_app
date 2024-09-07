@@ -1,32 +1,32 @@
 <?php
 
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProductController;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/inicio', function(){
-//     return view('home');
-// });
-
-
-
-// Route::get('products',[ProductController::class, 'index'])->name('products.index');
-// Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-// Route::post('products', [ProductController::class, 'store'])->name('products.sote');
-
-// Rota para a página inicial
 Route::get('/home', function () {
     return view('home');
 })->name('inicio');
 
-// Rota para criar um novo produto
+Route::get('/cliente', [ClienteController::class, 'index']);
+Route::get('/pedidos', [PedidoController::class, 'index']);
+
+
+
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-
-// Rota para armazenar o produto (deve corresponder ao método de armazenamento no controlador)
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
-// Rota para listar produtos
-Route::get('/products', [ProductController::class, 'index'])->name('listar');
+
+
+

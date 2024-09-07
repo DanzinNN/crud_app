@@ -13,29 +13,31 @@ class ProductController extends Controller
     public function index()
     {
         
-        $products = [
-            [
-                'id'                => 1, 
-                'name'              => 'Camisa', 
-                'valor'             => 33.30, 
-                'categoria'         => 'Vestuario', 
-                'marca'             => 'Nike', 
-                'qtd_estoque'       => 200
-            ],
+        // $products = [
+        //     [
+        //         'id'                => 1, 
+        //         'name'              => 'Camisa', 
+        //         'valor'             => 33.30, 
+        //         'categoria'         => 'Vestuario', 
+        //         'marca'             => 'Nike', 
+        //         'qtd_estoque'       => 200
+        //     ],
             
-            [
-                    'id'                => 2, 
-                    'name'              => 'Camisa', 
-                    'valor'             => 59.99, 
-                    'categoria'         => 'Vestuario', 
-                    'marca'             => 'Adidas', 
-                    'qtd_estoque'       => 350
-            ]
-        ];
+        //     [
+        //             'id'                => 2, 
+        //             'name'              => 'Camisa', 
+        //             'valor'             => 59.99, 
+        //             'categoria'         => 'Vestuario', 
+        //             'marca'             => 'Adidas', 
+        //             'qtd_estoque'       => 350
+        //     ]
+        // ];
 
-        $productList = array_column($products, 'name');
-        return view('listaProdutos', compact('products', 'productList'));
+        // $productList = array_column($products, 'name');
+        // return view('listaProdutos', compact('products', 'productList'));
 
+        $products = Product::orderBy('created_at', 'asc')->get();
+        return view('ListaProdutos')->with('products', $products);
     }
 
     /**
@@ -62,38 +64,51 @@ class ProductController extends Controller
 
         Product::create($request->all());
 
-        return redirect()->route('listar')->with('sucesso', 'Produto criado');
+        return redirect()->route('products.index')->with('sucesso', 'Produto criado');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        
+        return view('products.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        //
+        return view('products.edit', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'nome_produto' => 'required',
+            'marca' => 'required',
+            'categoria' => 'required',
+            'valor_compra' => 'required',
+            'valor_venda' => 'required',
+            'qtd_estoque' => 'required',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')->with('sucesso', 'Produto atualizado com sucesso');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index')->with('sucesso', 'Produto excluído com sucesso');
     }
 }

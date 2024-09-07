@@ -23,7 +23,7 @@
                     </a>
                 </td>
                 <td>
-                    <a href="{{ route('listar') }}">
+                    <a href="{{ route('products.index') }}">
                         <button>Lista de Produtos</button>
                     </a>
                 </td>
